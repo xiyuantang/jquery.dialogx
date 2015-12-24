@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN"  xml:lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<script src="../js/jquery-1.8.3.js" type="text/javascript"></script>
+<script src="../js/jquery.dialogx.js" type="text/javascript"></script>
+<link type="text/css" rel="stylesheet" href="../css/jquery.dialogx.css" />
+</head>
+<body>
+
+---------弹出自定义内容对话框---------<br /><br />
+<a href="javascript:void(0);" class="dialogtest-prototype1">弹出框，关闭父层</a> <br /><br />
+<a href="javascript:void(0);" class="dialogtest-prototype2">弹出框，不关闭父层</a> <br /><br />
+
+---------弹出固定结构对话框---------<br /><br />
+<a href="javascript:void(0);" class="dialogtest-alerterror">弹出错误框</a> <br /><br />
+<a href="javascript:void(0);" class="dialogtest-alert">弹出消息框</a> <br /><br />
+<a href="javascript:void(0);" class="dialogtest-confirm">弹出确认框</a> <br /><br />
+
+---------弹出固定结构对话框，倒计时关闭---------<br /><br />
+<a href="javascript:void(0);" class="dialogtest-alerterror-close-auto">弹出错误框-自动关闭</a> <br /><br />
+<a href="javascript:void(0);" class="dialogtest-alert-close-auto">弹出消息框-自动关闭</a> <br /><br />
+<a href="javascript:void(0);" class="dialogtest-confirm-close-auto">弹出确认框-自动关闭</a> <br /><br />
+
+---------弹出固定结构对话框，倒计时关闭---------<br /><br />
+<a href="javascript:void(0);" class="dialogtest-alerterror-closebycode">弹出错误框-手动关闭</a> <br /><br />
+<a href="javascript:void(0);" class="dialogtest-alert-closebycode">弹出消息框-手动关闭</a> <br /><br />
+<a href="javascript:void(0);" class="dialogtest-confirm-closebycode">弹出确认框-手动关闭</a> <br /><br />
+
+<script type="text/html" id="testHtml1">
+	<div>这是弹出文本1 <a href="javascript:void(0);" class="testHtml1-dialogtest" style="color:#FF0000;">点击，继续弹出，关闭父层</a> <br /><br /><br /><br /><br /><br /><br /><br /></div>
+</script>
+<script type="text/html" id="testHtml2">
+	<div>这是弹出文本1, <a href="javascript:void(0);" class="testHtml2-dialogtest" style="color:#FF0000;">点击，继续弹出，不关闭父层</a> <br /><br /><br /><br /><br /><br /><br /><br /></div>
+</script>
+<script type="text/html" id="testHtmlMsg">
+	<div>这是弹出文本2 <a href="javascript:void(0);" class="testHtmlMsg-btn">点击关闭</a> <br /><br /></div>
+</script>
+<script type="text/javascript">
+    $(function() {
+		$(".dialogtest-prototype1").click( function () {
+			var dialogTestHtml1 = $.dialogx({
+				'title':'弹出信息1',
+				'content':$('#testHtml1').html(),
+				'ctnWrapClass':'elastic-pupop-payrs',
+				'afterRenderFunc':function(dialogx){ // 对显示出来的弹出框可以继续做处理
+					$(".testHtml1-dialogtest",dialogx.htmlJqObj).click(function(){
+						dialogTestHtml1.close();
+						var dialogTestHtmlMsg = $.dialogx({ // 嵌套第二层
+							'title':'弹出信息2',
+							'content':$('#testHtmlMsg').html(),
+							'ctnWrapClass':'elastic-pupop-payrs',
+							'afterRenderFunc':function(dialogx){
+								$(".testHtmlMsg-btn",dialogx.htmlJqObj).click(function(){
+									dialogTestHtmlMsg.close();
+								});
+							}
+						});
+					});
+				 }
+			});
+			return false;
+		});
+
+		$(".dialogtest-prototype2").click( function () {
+			var dialogTestHtml1 = $.dialogx({
+				'title':'弹出信息1',
+				'content':$('#testHtml2').html(),
+				'ctnWrapClass':'elastic-pupop-payrs',
+				'afterRenderFunc':function(dialogx){ // 对显示出来的弹出框可以继续做处理
+					$(".testHtml2-dialogtest",dialogx.htmlJqObj).click(function(){
+						var dialogTestHtmlMsg = $.dialogx({ // 嵌套第二层
+							'title':'弹出信息2',
+							'content':$('#testHtmlMsg').html(),
+							'ctnWrapClass':'elastic-pupop-payrs',
+							'afterRenderFunc':function(dialogx){
+								$(".testHtmlMsg-btn",dialogx.htmlJqObj).click(function(){
+									dialogTestHtmlMsg.close();
+								});
+							}
+						});
+					});
+				 }
+			});
+			return false;
+		});
+		
+        $(".dialogtest-alerterror").click( function () {
+			$.errorAlertx('错误提示','充值金额必须大于0');
+			return false;
+		});
+		$(".dialogtest-alert").click( function () {
+			$.alertx('消息提示','充值金额必须大于0');
+			return false;
+		});
+		$(".dialogtest-confirm").click( function () {
+			$.confirmx('确认对话框','确认要删除吗？',function(dialogx){ console.log('触发确认按钮'); return true; },function(dialogx){ console.log('触发取消按钮'); return true; });
+			return false;
+		});
+		//...
+		$(".dialogtest-alerterror-close-auto").click( function () {
+			$.errorAlertx('错误提示','充值金额必须大于0').delayClose(5);
+			return false;
+		});
+		$(".dialogtest-alert-close-auto").click( function () {
+			$.alertx('消息提示','充值金额必须大于0').delayClose(5);
+			return false;
+		});
+		$(".dialogtest-confirm-close-auto").click( function () {
+			$.confirmx('确认对话框','确认要删除吗？',function(dialogx){ console.log('触发确认按钮'); return true; },function(dialogx){ console.log('触发取消按钮'); return true; }).delayClose(5);
+			return false;
+		});
+		//...
+		$(".dialogtest-alerterror-closebycode").click( function () {
+			$.errorAlertx('错误提示','充值金额必须大于0').delayClose(5,function(dialogx){ console.log('关闭前调用'); dialogx.close(); return false;});
+			return false;
+		});
+		$(".dialogtest-alert-closebycode").click( function () {
+			$.alertx('消息提示','充值金额必须大于0').delayClose(5,function(dialogx){ console.log('关闭前调用'); dialogx.close(); return false;});
+			return false;
+		});
+		$(".dialogtest-confirm-closebycode").click( function () {
+			$.confirmx('确认对话框','确认要删除吗？',function(dialogx){ console.log('触发确认按钮'); return true; },function(dialogx){ console.log('触发取消按钮'); return true; }).delayClose(5,function(dialogx){ console.log('关闭前调用'); dialogx.close(); return false;});
+			return false;
+		});
+    });
+</script>
+</body>
+</html>
