@@ -2,8 +2,8 @@
 -------------------------------------------
 依赖于Jquery的弹出对话框（模态对话框）
 -------------------------------------------
-var dialog = $.dialogx({
-	'title':'支付信息',
+var dialog = $.dialogx({ <br />
+	'title':'支付信息',<br />
 	'content':$('#payingHtml').html(),
 	'ctnWrapClass':'elastic-pupop-payrs',
 	'afterRenderFunc':function(dialogx){ // 对显示出来的弹出框可以继续做处理
